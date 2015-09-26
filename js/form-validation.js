@@ -64,29 +64,26 @@
                 var restoreFormValueFromCookies = function(form) {
                     var element;
 
-                    if (docCookies.hasItem(filterForm.elements['upload-filter'].value)) {
-                        console.log(filterForm.elements['upload-filter'].value);
-                        filterForm.elements['upload-filter'].value = docCookies.setItem(filterForm.elements['upload-filter'].value);
-                    }
                     for (var i = 0; i < filterForm.elements['upload-filter'].length; i++) {
+                         element = filterForm.elements['upload-filter'][i];
 
-                         element = filterForm.elements['upload-filter'].value;
-
+                        if (docCookies.hasItem(element.name)) {
+                            console.log(element.name);
+                            element.checked = docCookies.getItem(element.checked);
+                        }
                     }
                 }
 
             filterForm.onsubmit = function(evt) {
+
                     evt.preventDefault();
 
-                     var element;
 
-                    console.log(filterForm.elements['upload-filter'].value);
-                    for (var i = 0; i < filterForm.elements['upload-filter'].length; i++) {
-                         //element = filterForm.elements['upload-filter'].value;
-                         //if (docCookies.hasItem(filterForm.elements['upload-filter'].value)) {
-                             docCookies.setItem(filterForm.elements['upload-filter'].value);
-                         //}
-                     }
+                     var element;
+                for (var i = 0; i < filterForm.elements['upload-filter'].length; i++) {
+                        element = filterForm.elements['upload-filter'][i];
+                        docCookies.setItem(element.name, element.checked);
+                    }
 
 
                     filterForm.submit();
