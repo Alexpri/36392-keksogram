@@ -1,5 +1,5 @@
 (function () {
-    var formFilter = document.forms["upload-filter"],
+   /* var formFilter = document.forms["upload-filter"],
         filterInput =  formFilter.filter;
 
     var restoreFormValueCookie = function(form) {
@@ -27,6 +27,6 @@
 
             docCookies.setItem(element.name, element.value);
         }
-    }
+    }*/
 
 })();
