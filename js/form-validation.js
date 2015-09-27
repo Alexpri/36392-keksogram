@@ -68,28 +68,26 @@
                          element = filterForm.elements['upload-filter'][i];
 
                         if (docCookies.hasItem(element.name)) {
-                            console.log(element.name);
+                            console.log(element.name, element.checked);
                             element.checked = docCookies.getItem(element.checked);
                         }
                     }
                 }
 
             filterForm.onsubmit = function(evt) {
+                evt.preventDefault();
 
-                    evt.preventDefault();
-
-
-                     var element;
+                var element;
                 for (var i = 0; i < filterForm.elements['upload-filter'].length; i++) {
                         element = filterForm.elements['upload-filter'][i];
                         docCookies.setItem(element.name, element.checked);
-                    }
-
-
-                    filterForm.submit();
+                        console.log(element.name, element.checked);
                 }
 
-                restoreFormValueFromCookies(filterForm);
+                filterForm.submit();
+            }
+
+            restoreFormValueFromCookies(filterForm);
         }
 
     };
