@@ -14,11 +14,16 @@
 
 
 		if (picture['url']) {
-			pictureImage = new Image();
+			var pictureImage = new Image();
+
 			pictureImage.src = picture['url'];
 
+			var pictureImageOld = newPictureElem.querySelector('img');
+
+			pictureImage.parentNode.replaceChild(newChild, oldChild)
+
 			//console.log(pictureImage.src);
-				newPictureElem.querySelector('img').src = pictureImage.src;
+			newPictureElem.querySelector('img').src = pictureImage.src;
 
 			var imageLoadTimeout = setTimeout(function() {
 					newPictureElem.parentNode.classList.add('picture-load-failure');
