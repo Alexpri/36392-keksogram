@@ -4,7 +4,15 @@
 		init: function(){
 			self = this;
 
+			self.filterHiddem();
+
 			self.create();
+		},
+
+		filterHiddem: function(){
+			var filters = document.querySelector('.filters');
+
+			filters.classList.add('hidden');
 		},
 
 		create: function() {
