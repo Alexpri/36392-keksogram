@@ -7,12 +7,20 @@
 			self.filterHiddem();
 
 			self.create();
+
+			self.filterAdd();
 		},
 
 		filterHiddem: function(){
 			var filters = document.querySelector('.filters');
 
 			filters.classList.add('hidden');
+		},
+
+		filterAdd: function(){
+			var filters = document.querySelector('.filters');
+
+			filters.classList.remove('hidden');
 		},
 
 		create: function() {
