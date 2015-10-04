@@ -42,19 +42,18 @@
 
 				if (picture['url']) {
 					var pictureImage = new Image();
-
 					pictureImage.src = picture['url'];
 
 					var pictureImageOld = newPictureElem.querySelector('img');
-
-					newPictureElem.querySelector('img').parentNode.replaceChild(pictureImage, pictureImageOld);
-
 
 					var imageLoadTimeout = setTimeout(function() {
 						newPictureElem.classList.add('picture-load-failure');
 					}, IMAGE_FAILURE_TIMEOUT);
 
+
+
 					pictureImage.onload = function() {
+						newPictureElem.querySelector('img').parentNode.replaceChild(pictureImage, pictureImageOld);
 						pictureImage.width = IMAGE_WIDTH;
 						pictureImage.height = IMAGE_HEIGHT;
 						clearTimeout(imageLoadTimeout);
