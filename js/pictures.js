@@ -31,6 +31,7 @@
 			var REQUEST_FAILURE_TIMEOUT = 10000;
 			var IMAGE_WIDTH = 182;
 			var IMAGE_HEIGHT = 182;
+      var MONTH = 30 * 24 * 60 * 60 * 1000;
 
       var ReadyState = {
         'UNSET': 0,
@@ -134,21 +135,34 @@
 
         switch (filterID) {
           case 'filter-new':
-            filteredPictures = filteredPictures.sort(function(a, b) {
-              a = Date.parse(a.date);
-              b = Date.parse(b.date);
+            filteredPictures.forEach(function(picture, i){
+              var TODAY = Date.parse(new Date()),
+                  pictureDate = Date.parse(picture.date);
 
-              if (a > b) {
-                return -1;
-              }
+              lastMonth = (TODAY - MONTH);
+              console.log(pictureDate);
+              console.log(MONTH);
+              if (pictureDate >= lastMonth) {
 
-              if (a < b) {
-                return 1;
-              }
+                console.log(1);
 
-              if (a === b) {
-                return 0;
-              }
+                filteredPictures = filteredPictures.sort(function(a, b) {
+                a = Date.parse(a.date);
+                b = Date.parse(b.date);
+
+                  if (a > b) {
+                    return -1;
+                  }
+
+                  if (a < b) {
+                    return 1;
+                  }
+
+                  if (a === b) {
+                    return 0;
+                  }
+                });
+              };
             });
             break;
 
@@ -199,7 +213,7 @@
       function setActiveFilter(filterID) {
         var filteredPictures = filterPictures(pictures, filterID);
 
-        console.log(pictures);
+        console.log(filteredPictures);
 
         renderPictures(filteredPictures);
       }
