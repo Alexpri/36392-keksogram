@@ -41,6 +41,8 @@
       };
 
       function renderPictures(pictures) {
+        pictureContainer.classList.remove('hotels-list-failure');
+        pictureContainer.innerHTML = '';
 
         pictures.forEach(function(picture, i) {
           var newPictureElem = pictureTemp.content.children[0].cloneNode(true);
@@ -133,15 +135,18 @@
         switch (filterID) {
           case 'filter-new':
             filteredPictures = filteredPictures.sort(function(a, b) {
-              if (a.date > b.date) {
+              a = Date.parse(a.date);
+              b = Date.parse(b.date);
+
+              if (a > b) {
                 return -1;
               }
 
-              if (a.date < b.date) {
+              if (a < b) {
                 return 1;
               }
 
-              if (a.date === b.date) {
+              if (a === b) {
                 return 0;
               }
             });
