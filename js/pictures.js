@@ -135,16 +135,6 @@
 
         switch (filterID) {
           case 'filter-new':
-            filteredPictures.forEach(function(picture, i){
-              var TODAY = Date.parse(new Date()),
-                  pictureDate = Date.parse(picture.date);
-
-              lastMonth = (TODAY - MONTH);
-              console.log(pictureDate);
-              console.log(MONTH);
-              if (pictureDate >= lastMonth) {
-
-                console.log(1);
 
                 filteredPictures = filteredPictures.sort(function(a, b) {
                 a = Date.parse(a.date);
@@ -162,8 +152,6 @@
                     return 0;
                   }
                 });
-              };
-            });
             break;
 
           case 'filter-discussed':
@@ -171,15 +159,15 @@
               a = parseInt(a.comments);
               b = parseInt(b.comments);
 
-              if (a.comments > b.comments) {
+              if (a > b) {
                 return -1;
               }
 
-              if (a.comments < b.comments) {
+              if (a < b) {
                 return 1;
               }
 
-              if (a.comments === b.comments) {
+              if (a === b) {
                 return 0;
               }
             });
