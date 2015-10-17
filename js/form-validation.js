@@ -74,12 +74,11 @@
                     }
                 }
 
-            filterForm.onsubmit = function(evt) {
+            filterForm.addEventListener('submit', function(evt) {
+                evt.preventDefault();
 
-                    evt.preventDefault();
+                 var element;
 
-
-                     var element;
                 for (var i = 0; i < filterForm.elements['upload-filter'].length; i++) {
                         element = filterForm.elements['upload-filter'][i];
                         docCookies.setItem(element.name, element.checked);
@@ -87,9 +86,9 @@
 
 
                     filterForm.submit();
-                }
+                });
 
-                restoreFormValueFromCookies(filterForm);
+          restoreFormValueFromCookies(filterForm);
         }
 
     };
