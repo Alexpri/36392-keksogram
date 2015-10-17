@@ -210,6 +210,7 @@
 
       function setActiveFilter(filterID) {
         currentPictures = filterPictures(pictures, filterID);
+        currentPage = 0;
 
         //console.log(document.querySelector("'." + filterID + "'"));
 
