@@ -2,7 +2,7 @@
 
 	var Template = {
 		init: function(){
-			self = this;
+			var self = this;
 
 			self.filterHidden();
 
@@ -33,7 +33,8 @@
 			var IMAGE_HEIGHT = 182;
       var MONTH = 30 * 24 * 60 * 60 * 1000;
       var PAGE_SIZE = 12;
-      var currentPage = 0;
+      var currentPage;
+      var currentPictures;
 
       var ReadyState = {
         'UNSET': 0,
@@ -93,8 +94,6 @@
         pictureContainer.appendChild(picturesFragment);
       }
 
-
-      // Create for XHR self.loadPictures ?
 
       function showLoadFailture() {
         pictureContainer.classList.add('pictures-failure');
@@ -190,6 +189,8 @@
                 break;
         }
 
+        localStorage.setItem('filterID', filterID);
+
         return filteredPictures;
       }
 
@@ -208,17 +209,49 @@
 
 
       function setActiveFilter(filterID) {
-        var filteredPictures = filterPictures(pictures, filterID);
+        currentPictures = filterPictures(pictures, filterID);
 
-        renderPictures(filteredPictures, currentPage, replace);
+        //console.log(document.querySelector("'." + filterID + "'"));
+
+        renderPictures(currentPictures, currentPage, true);
+      }
+
+      function isNextPageAvailable() {
+        return currentPage < Math.ceil(pictures.length / PAGE_SIZE);
+      }
+
+
+      function isAtTheBottom () {
+        var GAP = 100;
+        return pictureContainer.getBoundingClientRect().bottom - GAP <= window.innerHeight;
+      }
+
+      function checkNextPage () {
+        if(isAtTheBottom() && isNextPageAvailable()){
+          window.dispatchEvent(new CustomEvent('loadneeded'));
+          renderPictures(currentPictures, currentPage++, false);
+        }
+      }
+
+      function initScroll() {
+        var someTimeout;
+
+        window.addEventListener('scroll', function() {
+          clearTimeout(someTimeout);
+          someTimeout = setTimeout(checkNextPage, 100);
+        });
+
+        window.addEventListener('loadneeded', function() {
+          renderPictures(currentPictures, currentPage++, false);
+        });
       }
 
       initFilters();
+      initScroll();
 
       loadPictures(function(loadedPictures) {
         pictures = loadedPictures;
-
-        setActiveFilter('filter-popular');
+        setActiveFilter(localStorage.getItem('filterID') || ('filter-popular'));
       });
 		}
 	};
