@@ -1,88 +1,126 @@
 (function() {
+    var Key = {
+      ESC: 27,
+      LEFT: 37,
+      RIGHT: 39
+    };
 
-  var Gallery = {
+    /*
+    * @param {number} value
+    * @param {number} min
+    * @param {number} max
+    * @return {number}
+    * */
 
-    init: function(){
-      var self = this;
+    function clamp(value, min, max) {
+      return Math.max(Math.min(value, min), max);
 
-      self.pictureContainer = document.querySelector('.pictures');
-      self.galleryElement = document.querySelector('.gallery-overlay');
-      self.closeBtn = document.querySelector('.gallery-overlay-close');
+    }
 
-      self.preview();
-    },
+    /*
+    * @cunstructor
+    * */
 
 
-    doesHaveParent: function(element, className) {
-      do{
-        if (element.classList.contains(className)) {
-         return !element.classList.contains('picture-load-failure');
-        }
+    var Gallery = function() {
+      this.element = document.body.querySelector('.gallery-overlay');
+      this._closeButton = this.element.querySelector('.gallery-overlay-close');
+      this._pictureElement = this.element.querySelector('.gallery-overlay-preview');
 
-        element = element.parentElement;
-      } while (element);
+      this._currentPhoto = 0;
+      this._photos = [];
 
-      return false;
-    },
+      this._onCloseClick = this._onCloseClick.bind(this);
+      this._onKeyDown = this._onKeyDown.bind(this);
+    };
 
-    preview: function() {
-      var self = this;
 
-      self.pictureContainer.addEventListener('click', function(evt) {
-        evt.preventDefault();
-        if (self.doesHaveParent(evt.target, 'picture')) {
-          self.showGallery();
-        }
-      });
-    },
+    Gallery.prototype.show = function() {
+      this.element.classList.remove('invisible');
+      //this.closeButton.addEventListener('click', this._onCloseClick);
+      //document.body.addEventListener('keydown', this._onkeyDown);
 
-    showGallery: function() {
+      this._showCurrentPhoto();
+    };
 
-      this.galleryElement.classList.remove('invisible');
-      this.closeBtn.addEventListener('click', this.closeHandler.bind(this));
-      document.body.addEventListener('keydown', this.keyHandler.bind(this));
-    },
+    Gallery.prototype.hide = function() {
+      this.element.classList.add('invisible');
 
-    hideGallery: function() {
+      //this.closeButton.removeEventListener('click', this._onCloseClick);
+      //document.body.removeEventListener('keydown', this._onkeyDown);
 
-      this.galleryElement.classList.add('invisible');
-      this.closeBtn.removeEventListener('click', this.closeHandler.bind(this));
-      document.body.removeEventListener('keydown', this.keyHandler.bind(this));
-    },
+      this._photos = [];
+      this._currentPhoto = 0;
+    };
 
-    closeHandler: function(evt) {
-
+    Gallery.prototype._onCloseClick = function(evt) {
       evt.preventDefault();
-      this.hideGallery();
-    },
 
-    keyHandler: function(evt) {
-      var self = this;
+      this.hide();
+    };
 
-      key = {
-          'ESC': 27,
-          'LEFT': 37,
-          'RIGHT': 39
-      };
+
+    /*
+    *@private
+    *
+    * */
+
+    Gallery.prototype._showCurrentPhoto = function() {
+      this._pictureElement.innerHTML = '';
+
+
+      var imageElement = new Image();
+      imageElement.src = this._photos[this._currentPhoto];
+      imageElement.onload = function() {
+        this._pictureElement.appendChild(imageElement);
+      }.bind(this);
+    };
+
+    /**
+    * @param {Event} evt
+    * @private
+    */
+
+    Gallery.prototype._onKeyDown = function(evt) {
 
       switch (evt.keyCode) {
-        case key.LEFT:
-              console.log('show prev picture');
-              break;
-        case key.RIGHT:
-          console.log('show next picture');
-              break;
-        case key.ESC:
-          self.hideGallery();
-              break;
-        default: break;
+        case Key.LEFT:
+          this.setCurrentPhoto(this._currentPhoto - 1);
+          break;
+        case Key.RIGHT:
+          this.setCurrentPhoto(this._currentPhoto + 1);
+          break;
+        case Key.ESC:
+          this.hide();
+          break;
+        default:
+          break;
       }
     }
-  };
 
 
-  (function() {
-    Gallery.init();
+    /*
+     * @param {Array.<string>} photos
+     * */
+
+
+    Gallery.prototype.setPhotos = function (photos) {
+      this._photos = photos;
+    };
+
+    /*
+     * @param {number} index
+     * */
+
+    Gallery.prototype.setCurrentPhoto = function (index) {
+      index = clamp(index, 0, this._photos.length - 1);
+
+      if (this._currentPhoto) {
+        return;
+      }
+    };
+
+
+    window.Gallery = Gallery;
+
   })();
-
-})();
