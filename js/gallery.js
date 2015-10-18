@@ -36,31 +36,27 @@
       });
     },
 
-
     showGallery: function() {
-      var self = this;
 
-      self.galleryElement.classList.remove('invisible');
-      self.closeBtn.addEventListener('click', self.closeHendler);
-      document.body.addEventListener('keydown', self.keyHendler);
+      this.galleryElement.classList.remove('invisible');
+      this.closeBtn.addEventListener('click', this.closeHandler.bind(this));
+      document.body.addEventListener('keydown', this.keyHandler.bind(this));
     },
 
     hideGallery: function() {
-      var self = this;
 
-      self.galleryElement.classList.add('invisible');
-      self.closeBtn.removeEventListener('click', self.closeHendler);
-      document.body.removeEventListener('keydown', self.keyHendler);
+      this.galleryElement.classList.add('invisible');
+      this.closeBtn.removeEventListener('click', this.closeHandler.bind(this));
+      document.body.removeEventListener('keydown', this.keyHandler.bind(this));
     },
 
-    closeHendler: function(evt) {
-      var self = this;
+    closeHandler: function(evt) {
 
       evt.preventDefault();
-      Gallery.hideGallery();
+      this.hideGallery();
     },
 
-    keyHendler: function(evt) {
+    keyHandler: function(evt) {
       var self = this;
 
       key = {
@@ -77,7 +73,7 @@
           console.log('show next picture');
               break;
         case key.ESC:
-          Gallery.hideGallery();
+          self.hideGallery();
               break;
         default: break;
       }

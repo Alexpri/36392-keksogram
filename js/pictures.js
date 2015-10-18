@@ -198,7 +198,6 @@
         var filterForm = document.querySelector('.filters');
 
 
-
         filterForm.addEventListener('click', function(evt) {
           var clickedFilter = evt.target;
 
@@ -212,9 +211,8 @@
         currentPictures = filterPictures(pictures, filterID);
         currentPage = 0;
 
-        //console.log(document.querySelector("'." + filterID + "'"));
-
         renderPictures(currentPictures, currentPage, true);
+        checkNextPage();
       }
 
       function isNextPageAvailable() {
@@ -230,7 +228,6 @@
       function checkNextPage () {
         if(isAtTheBottom() && isNextPageAvailable()){
           window.dispatchEvent(new CustomEvent('loadneeded'));
-          renderPictures(currentPictures, currentPage++, false);
         }
       }
 
