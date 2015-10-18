@@ -31,14 +31,14 @@
       this._photos = [];
 
       this._onCloseClick = this._onCloseClick.bind(this);
-      this._onDocumentKeyDown = this._onKeyDown.bind(this);
+      this._onDocumentKeyDown = this._onDocumentKeyDown.bind(this);
     };
 
 
     Gallery.prototype.show = function() {
       this.element.classList.remove('invisible');
-      //this.closeButton.addEventListener('click', this._onCloseClick);
-      //document.body.addEventListener('keydown', this._onkeyDown);
+      this.closeButton.addEventListener('click', this._onCloseClick);
+      document.body.addEventListener('keydown', this._onDocumentKeyDown);
 
       this._showCurrentPhoto();
     };

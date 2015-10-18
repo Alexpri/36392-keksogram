@@ -69,9 +69,8 @@
   Photo.prototype._onPhotoClick = function() {
     if (!this._element.classList.contains('picture-load-failure')) {
       var galleryEvent = new CustomEvent('galleryclick', {detail: {pictureElement: this}});
-      window.despatchEvent(galleryEvent);
+      window.dispatchEvent(galleryEvent);
     }
-
   };
 
   Photo.prototype.getPhotos = function() {
