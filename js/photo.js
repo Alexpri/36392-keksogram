@@ -15,7 +15,7 @@
     this._data = data;
     this._element = null;
 
-    this._onClick = this._onClick.bind(this);
+    this._onPhotoClick = this._onPhotoClick.bind(this);
   };
 
 
@@ -57,16 +57,16 @@
       container.appendChild(newPictureElem);
 
       this._element =  newPictureElem;
-      this._element.addEventListener('click', this._onClick);
+      this._element.addEventListener('click', this._onPhotoClick);
   };
 
   Photo.prototype.unrender = function() {
     this._element.parentNode.removeChild(this._element);
-    this._element.removeEventListener('click', this._onClick());
+    this._element.removeEventListener('click', this._onPhotoClick());
     this._element = null;
   };
 
-  Photo.prototype._onClick = function() {
+  Photo.prototype._onPhotoClick = function() {
     if (!this._element.classList.contains('picture-load-failure')) {
       var galleryEvent = new CustomEvent('galleryclick', {detail: {pictureElement: this}});
       window.despatchEvent(galleryEvent);

@@ -31,7 +31,7 @@
       this._photos = [];
 
       this._onCloseClick = this._onCloseClick.bind(this);
-      this._onKeyDown = this._onKeyDown.bind(this);
+      this._onDocumentKeyDown = this._onKeyDown.bind(this);
     };
 
 
@@ -81,7 +81,7 @@
     * @private
     */
 
-    Gallery.prototype._onKeyDown = function(evt) {
+    Gallery.prototype._onDocumentKeyDown = function(evt) {
 
       switch (evt.keyCode) {
         case Key.LEFT:
