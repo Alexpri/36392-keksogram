@@ -4,10 +4,10 @@
   var IMAGE_WIDTH = 182;
   var IMAGE_HEIGHT = 182;
 
-  /*
+  /**
   * @constructor
   * @param {Object} data
-  * */
+  */
 
   var pictureTemp = document.querySelector('.picture-template');
 
@@ -19,15 +19,17 @@
   };
 
 
-  /*
+  /**
   * @param {Element|DocumentFragment} container
-  * */
+  */
 
-  Photo.prototype.render = function(container) {
+  Photo.prototype.render = function(container, number) {
       var newPictureElem = pictureTemp.content.children[0].cloneNode(true);
 
       newPictureElem.querySelector('.picture-comments').textContent = this._data['comments'];
       newPictureElem.querySelector('.picture-likes').textContent = this._data['likes'];
+
+      this._data['number'] = number;
 
       if (this._data['url']) {
         var pictureImage = new Image();
@@ -66,7 +68,9 @@
     this._element = null;
   };
 
-  Photo.prototype._onPhotoClick = function() {
+  Photo.prototype._onPhotoClick = function(evt) {
+    evt.preventDefault();
+
     if (!this._element.classList.contains('picture-load-failure')) {
       var galleryEvent = new CustomEvent('galleryclick', {detail: {pictureElement: this}});
       window.dispatchEvent(galleryEvent);

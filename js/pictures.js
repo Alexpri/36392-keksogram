@@ -58,12 +58,11 @@
         var picturesTo = picturesFrom + PAGE_SIZE;
         picturesToRender = picturesToRender.slice(picturesFrom, picturesTo);
 
-        picturesToRender.forEach(function(pictureData) {
+        picturesToRender.forEach(function(pictureData, number) {
           var newPictureElem = new Photo(pictureData);
-          newPictureElem.render(picturesFragment);
+          newPictureElem.render(picturesFragment, number);
           renderedPictures.push(newPictureElem);
         });
-
 
         pictureContainer.appendChild(picturesFragment);
       };
@@ -220,13 +219,16 @@
 
       function initGallery() {
         window.addEventListener('galleryclick', function(evt) {
-          gallery.setPhotos(evt.detail.pictureElement.getPhotos());
+          gallery.setPhotos(currentPictures);
+
+          gallery.setCurrentPhoto(evt.detail.pictureElement._data.number);
           gallery.show();
         })
       }
 
       initFilters();
       initScroll();
+      initGallery();
 
       loadPictures(function(loadedPictures) {
         pictures = loadedPictures;

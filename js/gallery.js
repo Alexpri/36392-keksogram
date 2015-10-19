@@ -14,7 +14,6 @@
 
     function clamp(value, min, max) {
       return Math.max(Math.min(value, min), max);
-
     }
 
     /*
@@ -24,7 +23,7 @@
 
     var Gallery = function() {
       this.element = document.body.querySelector('.gallery-overlay');
-      this._closeButton = this.element.querySelector('.gallery-overlay-close');
+      this.closeButton = this.element.querySelector('.gallery-overlay-close');
       this._pictureElement = this.element.querySelector('.gallery-overlay-preview');
 
       this._currentPhoto = 0;
@@ -46,8 +45,8 @@
     Gallery.prototype.hide = function() {
       this.element.classList.add('invisible');
 
-      //this.closeButton.removeEventListener('click', this._onCloseClick);
-      //document.body.removeEventListener('keydown', this._onkeyDown);
+      this.closeButton.removeEventListener('click', this._onCloseClick);
+      document.body.removeEventListener('keydown', this._onkeyDown);
 
       this._photos = [];
       this._currentPhoto = 0;
@@ -60,14 +59,15 @@
     };
 
 
-    /*
+    /**
     *@private
     *
-    * */
+    */
 
     Gallery.prototype._showCurrentPhoto = function() {
       this._pictureElement.innerHTML = '';
 
+      console.log([this._currentPhoto]);
 
       var imageElement = new Image();
       imageElement.src = this._photos[this._currentPhoto];
@@ -99,21 +99,22 @@
     }
 
 
-    /*
+    /**
      * @param {Array.<string>} photos
-     * */
+     */
 
 
     Gallery.prototype.setPhotos = function (photos) {
       this._photos = photos;
     };
 
-    /*
+    /**
      * @param {number} index
-     * */
+     */
 
     Gallery.prototype.setCurrentPhoto = function (index) {
       index = clamp(index, 0, this._photos.length - 1);
+
 
       if (this._currentPhoto) {
         return;
