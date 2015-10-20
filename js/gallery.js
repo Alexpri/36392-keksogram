@@ -67,8 +67,6 @@
     Gallery.prototype._showCurrentPhoto = function() {
       this._pictureElement.innerHTML = '';
 
-      console.log([this._currentPhoto]);
-
       var imageElement = new Image();
       imageElement.src = this._photos[this._currentPhoto];
       imageElement.onload = function() {
@@ -105,7 +103,14 @@
 
 
     Gallery.prototype.setPhotos = function (photos) {
-      this._photos = photos;
+
+      photosArr = new Array();
+
+      photos.forEach(function (item, i) {
+        photosArr.push(item['url']);
+      });
+
+      this._photos = photosArr;
     };
 
     /**
@@ -113,7 +118,9 @@
      */
 
     Gallery.prototype.setCurrentPhoto = function (index) {
-      index = clamp(index, 0, this._photos.length - 1);
+      //index = clamp(index, 0, this._photos.length - 1);
+
+      this._currentPhoto = index;
 
 
       if (this._currentPhoto) {
