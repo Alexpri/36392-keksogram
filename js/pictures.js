@@ -175,7 +175,6 @@
           var clickedFilter = evt.target;
 
           setActiveFilter(clickedFilter.id);
-          clickedFilter.checked;
         });
       }
 
@@ -233,6 +232,11 @@
       loadPictures(function(loadedPictures) {
         pictures = loadedPictures;
         setActiveFilter(localStorage.getItem('filterID') || ('filter-popular'));
+        if (localStorage.getItem('filterID')) {
+          var filterStorage = document.querySelector('#' + localStorage.getItem('filterID'));
+          filterStorage.checked = true;
+        }
+
       });
 		}
 	};
