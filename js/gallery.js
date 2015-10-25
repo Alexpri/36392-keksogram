@@ -22,12 +22,13 @@
 
 
     var Gallery = function() {
+        this._photos = new Backbone.Collection();
+
       this.element = document.body.querySelector('.gallery-overlay');
       this.closeButton = this.element.querySelector('.gallery-overlay-close');
       this._pictureElement = this.element.querySelector('.gallery-overlay-preview');
 
       this._currentPhoto = 0;
-      this._photos = [];
 
       this._onCloseClick = this._onCloseClick.bind(this);
       this._onDocumentKeyDown = this._onDocumentKeyDown.bind(this);
@@ -48,7 +49,7 @@
       this.closeButton.removeEventListener('click', this._onCloseClick);
       document.body.removeEventListener('keydown', this._onkeyDown);
 
-      this._photos = [];
+      this._photos.reset();
       this._currentPhoto = 0;
     };
 
@@ -67,11 +68,10 @@
     Gallery.prototype._showCurrentPhoto = function() {
       this._pictureElement.innerHTML = '';
 
-      var imageElement = new Image();
-      imageElement.src = this._photos[this._currentPhoto];
-      imageElement.onload = function() {
-        this._pictureElement.appendChild(imageElement);
-      }.bind(this);
+      var imageElement = new GalleryPicture({ model: this._photos.at(this._currentPhoto) });
+      imageElement.render();
+
+      this._pictureElement.appendChild(imageElement.el);
     };
 
     /**
@@ -104,13 +104,19 @@
 
     Gallery.prototype.setPhotos = function (photos) {
 
-      photosArr = new Array();
+        this._photos.reset(photos.map(function(photoSrc){
+            return new Backbone.Model({
+                url: photoSrc
+            });
+        }));
+
+      /*photosArr = new Array();
 
       photos.forEach(function (item, i) {
         photosArr.push(item['url']);
       });
 
-      this._photos = photosArr;
+      this._photos = photosArr;*/
     };
 
     /**
@@ -118,7 +124,7 @@
      */
 
     Gallery.prototype.setCurrentPhoto = function (index) {
-      //index = clamp(index, 0, this._photos.length - 1);
+      index = clamp(index, 0, this._photos.length - 1);
 
       this._currentPhoto = index;
 
