@@ -5,9 +5,7 @@
 			var self = this;
 
 			self.filterHidden();
-
 			self.create();
-
 			self.filterAdd();
 		},
 
@@ -28,16 +26,20 @@
                 gallery = new Gallery(),
                 pictures;
 
+              /**
+               * @const
+               * @type {number}
+               */
               var REQUEST_FAILURE_TIMEOUT = 10000;
               var PAGE_SIZE = 12;
               var currentPage = 0;
+
+
               var currentPictures;
-              var renderedPictures = [];
 
               /**
                * @type {PicturesCollection}
                */
-
               var picturesCollection = new PicturesCollection();
 
 
@@ -49,14 +51,12 @@
               /**
                * @type {Array.<object>}
                */
-
               var renderedViews = [];
 
               /**
                * @param {number} pageNumber
                * @param {boolean=} replace
                */
-
               function renderPictures(pageNumber, replace) {
                 var fragment = document.createDocumentFragment();
                 var picturesFrom = pageNumber * PAGE_SIZE;
@@ -72,37 +72,27 @@
 
                     pictureContainer.removeChild(viewToRemove.el);
                     viewToRemove.off('galleryclick');
-                    viewToRemove.remove;
+                    viewToRemove.remove();
 
                   }
                 }
 
-
                 picturesCollection.slice(picturesFrom, picturesTo).forEach(function(model) {
                      var view = new PictureView({model: model});
-
 
                      view.render();
                      fragment.appendChild(view.el);
                      renderedViews.push(view);
 
                     view.on('galleryclick', function() {
-                      console.log(view.model.get('url'));
                       gallery.setPhotos(view.model.get('pictures'));
                       gallery.setCurrentPhoto(0);
                       gallery.show();
                     });
                 });
 
-                /*picturesToRender.forEach(function(pictureData, number) {
-                  var newPictureElem = new Photo(pictureData);
-                  newPictureElem.render(picturesFragment, number);
-                  renderedPictures.push(newPictureElem);
-                });*/
-
-
                 pictureContainer.appendChild(fragment);
-              };
+              }
 
 
               function showLoadFailture() {
@@ -114,7 +104,6 @@
                * @param {string} filterID
                * return {Array.<object>}
                */
-
               function filterPictures(filterID) {
 
                 var list = initiallyLoaded.slice(0);
@@ -179,29 +168,28 @@
               }
 
 
+              /**
+               * @param {String} filterID
+               */
               function setActiveFilter(filterID) {
                 currentPictures = filterPictures(filterID);
                 currentPage = 0;
 
                 renderPictures(currentPage, true);
                 checkNextPage();
-            }
+              }
 
-            /*function setActiveFilter(filterID) {
-                currentPictures = filterPictures(filterID);
-                currentPage = 0;
 
-                console.log(currentPictures, currentPage);
-
-                renderPictures(currentPictures, currentPage, true);
-                checkNextPage();
-            }*/
-
+              /**
+               * @return {number}
+               */
               function isNextPageAvailable() {
                 return currentPage < Math.ceil(initiallyLoaded.length / PAGE_SIZE);
               }
 
-
+              /**
+               * @return {number}
+               */
               function isAtTheBottom () {
                 var GAP = 100;
                 return pictureContainer.getBoundingClientRect().bottom - GAP <= window.innerHeight;
@@ -226,27 +214,15 @@
                 });
               }
 
-              /*function initGallery() {
-                window.addEventListener('galleryclick', function(evt) {
-                  gallery.setPhotos(currentPictures);
-
-                  gallery.setCurrentPhoto(evt.detail.pictureElement._data.number);
-                  gallery.show();
-                })
-              }*/
-
-
-              //initGallery();
-
               picturesCollection.fetch({timeout: REQUEST_FAILURE_TIMEOUT}).success(function(loaded, state, jqXHR) {
                 initiallyLoaded = jqXHR.responseJSON;
                 initFilters();
                 initScroll();
                 setActiveFilter(localStorage.getItem('filterID') || ('filter-popular'));
-               /* if (localStorage.getItem('filterID')) {
+                if (localStorage.getItem('filterID')) {
                   var filterStorage = document.querySelector('#' + localStorage.getItem('filterID'));
                   filterStorage.checked = true;
-                }*/
+                }
               }).fail(function() {
                 showLoadFailture();
               })

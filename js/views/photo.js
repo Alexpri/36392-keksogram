@@ -2,7 +2,6 @@
 
 (function() {
 
-
   /**
    * @const
    * @type {number}
@@ -34,11 +33,10 @@
       this.model.on('change:liked', this._onModelLike);
     },
 
-    /*
+    /**
      * @type {string}
      * override
      */
-
     events: {
       'click': '_onClick'
     },
@@ -47,7 +45,6 @@
      * @type {string}
      * override
      */
-
     tagName: 'article',
 
 
@@ -60,14 +57,12 @@
     /**
      * override
      */
-
     render: function() {
       this.el.appendChild(pictureTemp.content.cloneNode(true));
 
       this.el.querySelector('.picture-comments').textContent = this.model.get('comments');
       this.el.querySelector('.picture-likes').textContent =  this.model.get('likes');
 
-      //this.model.get('number') = number;
 
       if (this.model.get('url')) {
         var pictureImage = new Image();
@@ -94,9 +89,13 @@
         pictureImage.addEventListener('abort', this._onImageFail.bind(this));
       }
 
-      this._updateLike;
+      this._updateLike();
     },
 
+    /**
+     * @param {Event} evt
+     * @private
+     */
     _onClick: function(evt) {
       var clickedElement = evt.currentTarget;
 
@@ -105,7 +104,7 @@
           this.trigger('galleryclick');
       }
 
-      if (evt.target.classList.contains('picture-favourite')) {
+      if (evt.target.classList.contains('picture-likes')) {
         if (this.model.get('liked')) {
           this.model.dislike();
         } else {
@@ -115,22 +114,22 @@
     },
 
 
-    /*
+    /**
      * @param {Event} evt
      * @private
-    */
-
+     */
     _onImageLoad: function(evt) {
       clearTimeout(this._imageLoadTimeout);
 
       var loadedImage = evt.path[0];
 
       this._cleanupImageListeners(loadedImage);
-
-      //this.el.querySelector('gallery-overlay-image').src = loadedImage.src;
     },
 
 
+    /**
+     * @private
+     */
     _onImageFail: function(evt) {
       var failedImage = evt.path[0];
 
@@ -152,13 +151,18 @@
      * @private
      */
     _updateLike: function() {
-      var likeButton = this.el.querySelector('gallery-overlay-controls-like');
+      var likeButton = this.el.querySelector('picture-likes');
 
       if (likeButton) {
         likeButton.classList.toggle('picture-favourite-liked', this.model.get('liked'));
       }
     },
 
+
+    /**
+     * @param {String} image
+     * @private
+     */
     _cleanupImageListeners: function(image) {
       image.removeEventListener('load', this._onImageLoad);
       image.removeEventListener('error', this._onImageError);
