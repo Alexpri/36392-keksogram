@@ -4,7 +4,6 @@
 
         init : function(){
             var self = this;
-            console.log(1);
             self.validation();
             self.cookies();
         },
@@ -68,7 +67,6 @@
                          element = filterForm.elements['upload-filter'][i];
 
                         if (docCookies.hasItem(element.name)) {
-                            console.log(element.name);
                             element.checked = docCookies.getItem(element.checked);
                         }
                     }
@@ -92,10 +90,6 @@
         }
 
     };
-
-
-
-
 
 
     (function() {

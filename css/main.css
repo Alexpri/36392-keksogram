@@ -60,7 +60,7 @@ body {
   margin-top: 5px;
   padding: 0;
   position: absolute;
-  width: 582px;
+  width: 572px;
 }
 
 .upload-overlay {
@@ -74,7 +74,7 @@ body {
 
 .upload-form {
   height: 569px;
-  width: 582px;
+  width: 574px;
 }
 
 .upload-image {
@@ -115,7 +115,7 @@ body {
   cursor: pointer;
   height: 182px;
   margin: 0;
-  left: 202px;
+  left: 198px;
   padding: 0;
   position: absolute;
   top: 193px;
@@ -369,13 +369,13 @@ input[type=radio]:checked + .upload-filter-label {
   }
 
   .picture:nth-of-type(2n-1):nth-of-type(-n+6) {
-    margin-right: 12px;
+    margin-right: 14px;
   }
 
   .picture:nth-of-type(2),
   .picture:nth-of-type(6),
   .picture:nth-of-type(10) {
-    margin-right: 600px;
+    margin-right: 602px;
   }
 }
 

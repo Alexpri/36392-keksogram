@@ -15,6 +15,11 @@
     uploadForm.classList.remove('invisible');
   };
 
+  window.addEventListener('resizerchange', function(){
+
+    //resizer.setConstraint();
+  })
+
   resizeForm.onsubmit = function(evt) {
     evt.preventDefault();
     filterForm.elements['filter-image-src'] = previewImage.src;

@@ -16,11 +16,17 @@
 
     // Создаем холст только после загрузки изображения.
     this._image.onload = function() {
+
+      /**
+       * @const
+       * @type {number}
+       */
+      var IMAGE_HEIGHT = 574;
+      var IMAGE_WIDTH = 507;
       // Размер холста равен размеру загруженного изображения. Это нужно
       // для удобства работы с координатами.
-      this._container.width = this._image.naturalWidth;
-      this._container.height = this._image.naturalHeight;
-
+      this._container.width = IMAGE_HEIGHT;
+      this._container.height = IMAGE_WIDTH;
       /**
        * Предлагаемый размер кадра в виде коэффициента относительно меньшей
        * стороны изображения.
@@ -96,9 +102,24 @@
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
 
+
+      var leftTopX = - this._resizeConstraint.side / 2;
+      var leftTopY = - this._resizeConstraint.side / 2;
+
+      var rightBottomX = this._resizeConstraint.side;
+      var rightBottomY = this._resizeConstraint.side;
+
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
       //
+
+      var LINE_WIDTH = 6;
+
+
+      this._ctx.lineWidth = LINE_WIDTH;
+      this._ctx.setLineDash([15, 10]);
+      this._ctx.strokeStyle = '#FFE753';
+      this._ctx.strokeRect(leftTopX, leftTopX, rightBottomX, rightBottomY);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
@@ -181,7 +202,9 @@
       }
 
       this._element = element;
+
       this._element.insertBefore(this._container, this._element.firstChild);
+
       // Обработчики начала и конца перетаскивания.
       this._container.addEventListener('mousedown', this._onDragStart);
     },
@@ -227,6 +250,7 @@
 
       requestAnimationFrame(function() {
         this.redraw();
+        console.log(1);
         window.dispatchEvent(new CustomEvent('resizerchange'));
       }.bind(this));
     },

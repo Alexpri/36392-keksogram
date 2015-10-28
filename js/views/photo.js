@@ -13,7 +13,7 @@
   /**
    * @type {Element}
    */
-  var pictureTemp = document.querySelector('.picture-template');
+  var pictureTemp = document.querySelector('#picture-template');
 
 
   /**

@@ -26,7 +26,13 @@
 
     uploadImage(fileElement, function(image) {
       sessionStorage.setItem('uploaded-image', image);
-      resizeForm.querySelector('.resize-image-preview').src = image;
+      var imageObj = new Image();
+      imageObj.src = image;
+
+      resizer = new Resizer(image);
+
+      resizer.setElement(resizeForm);
+      //resizeForm.querySelector('.resize-image-preview').src = image;
       filterForm.querySelector('.filter-image-preview').src = image;
 
       uploadForm.classList.add('invisible');
