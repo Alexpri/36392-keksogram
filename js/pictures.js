@@ -5,9 +5,7 @@
 			var self = this;
 
 			self.filterHidden();
-
 			self.create();
-
 			self.filterAdd();
 		},
 
@@ -24,216 +22,210 @@
 		},
 
 		create: function() {
-			var pictureContainer = document.querySelector('.pictures'),
-          picturesFragment = document.createDocumentFragment(),
-          gallery = new Gallery(),
-          pictures;
+            var pictureContainer = document.querySelector('.pictures'),
+                gallery = new Gallery(),
+                pictures;
 
-			var REQUEST_FAILURE_TIMEOUT = 10000;
-      var PAGE_SIZE = 12;
-      var currentPage = 0;
-      var currentPictures;
-      var renderedPictures = [];
-
-      var ReadyState = {
-        'UNSET': 0,
-        'OPENED': 1,
-        'HEADERS_RECEIVED': 2,
-        'LOADING': 3,
-        'DONE': 4
-      };
-
-      function renderPictures(picturesToRender, pageNumber, replace) {
-        replace = typeof replace !== 'undefined' ? replace : true;
-        pageNumber = pageNumber || 0;
-
-        if (replace) {
-          var el;
-          while ((el = renderedPictures.shift())) {
-            el.unrender();
-          }
-        }
-
-        var picturesFrom = pageNumber * PAGE_SIZE;
-        var picturesTo = picturesFrom + PAGE_SIZE;
-        picturesToRender = picturesToRender.slice(picturesFrom, picturesTo);
-
-        picturesToRender.forEach(function(pictureData, number) {
-          var newPictureElem = new Photo(pictureData);
-          newPictureElem.render(picturesFragment, number);
-          renderedPictures.push(newPictureElem);
-        });
-
-        pictureContainer.appendChild(picturesFragment);
-      };
+              /**
+               * @const
+               * @type {number}
+               */
+              var REQUEST_FAILURE_TIMEOUT = 10000;
+              var PAGE_SIZE = 12;
+              var currentPage = 0;
 
 
-      function showLoadFailture() {
-        pictureContainer.classList.add('pictures-failure');
-      }
+              var currentPictures;
 
-      function loadPictures(callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.timeout = REQUEST_FAILURE_TIMEOUT;
-
-        xhr.open('get', 'data/pictures.json');
-        xhr.send();
+              /**
+               * @type {PicturesCollection}
+               */
+              var picturesCollection = new PicturesCollection();
 
 
-        xhr.addEventListener('readystatechange', function(evt) {
-          var loadedXhr = evt.target;
-          pictureContainer.classList.add('pictures-loading');
-          switch (loadedXhr.readyState) {
-            case ReadyState.OPENED:
-            case ReadyState.HEADERS_RECEIVED:
-            case ReadyState.LOADING:
+              /**
+               * @type {Array.<object>}
+               */
+              var initiallyLoaded = [];
 
-              break;
+              /**
+               * @type {Array.<object>}
+               */
+              var renderedViews = [];
 
-            case ReadyState.DONE:
-            default:
-              if (loadedXhr.status == 200) {
-                var data = loadedXhr.response;
-
-                pictureContainer.classList.remove('pictures-loading');
-                callback(JSON.parse(data));
-              }
-
-              if (loadedXhr.status == 400) {
-                showLoadFailture();
-              }
-
-              break;
-          }
-        });
+              /**
+               * @param {number} pageNumber
+               * @param {boolean=} replace
+               */
+              function renderPictures(pageNumber, replace) {
+                var fragment = document.createDocumentFragment();
+                var picturesFrom = pageNumber * PAGE_SIZE;
+                var picturesTo = picturesFrom + PAGE_SIZE;
 
 
-        xhr.addEventListener('timeout', function() {
-          showLoadFailture();
-        });
-      }
+                replace = typeof replace !== 'undefined' ? replace : true;
+                pageNumber = pageNumber || 0;
 
-      function filterPictures(pictures, filterID) {
+                if (replace) {
+                  while (renderedViews.length) {
+                    var viewToRemove = renderedViews.shift();
 
-        var filteredPictures = pictures.slice(0);
+                    pictureContainer.removeChild(viewToRemove.el);
+                    viewToRemove.off('galleryclick');
+                    viewToRemove.remove();
 
-        switch (filterID) {
-          case 'filter-new':
-
-                filteredPictures = filteredPictures.sort(function(a, b) {
-                a = Date.parse(a.date);
-                b = Date.parse(b.date);
-
-                  if (a > b) {
-                    return -1;
                   }
+                }
 
-                  if (a < b) {
-                    return 1;
-                  }
+                picturesCollection.slice(picturesFrom, picturesTo).forEach(function(model) {
+                     var view = new PictureView({model: model});
 
-                  if (a === b) {
-                    return 0;
-                  }
+                     view.render();
+                     fragment.appendChild(view.el);
+                     renderedViews.push(view);
+
+                    view.on('galleryclick', function() {
+                      gallery.setPhotos(view.model.get('pictures'));
+                      gallery.setCurrentPhoto(0);
+                      gallery.show();
+                    });
                 });
-            break;
 
-          case 'filter-discussed':
-            filteredPictures = filteredPictures.sort(function(a, b) {
-              a = parseInt(a.comments, 10);
-              b = parseInt(b.comments, 10);
-
-              if (a > b) {
-                return -1;
+                pictureContainer.appendChild(fragment);
               }
 
-              if (a < b) {
-                return 1;
+
+              function showLoadFailture() {
+                pictureContainer.classList.add('pictures-failure');
               }
 
-              if (a === b) {
-                return 0;
+
+              /**
+               * @param {string} filterID
+               * return {Array.<object>}
+               */
+              function filterPictures(filterID) {
+
+                var list = initiallyLoaded.slice(0);
+
+                switch (filterID) {
+                  case 'filter-new':
+                        picturesCollection.sortBy('new');
+
+                      list.sort(function(a, b) {
+                        a = Date.parse(a.date);
+                        b = Date.parse(b.date);
+
+                          if (a > b) {
+                            return -1;
+                          }
+
+                          if (a < b) {
+                            return 1;
+                          }
+
+                          if (a === b) {
+                            return 0;
+                          }
+                      });
+                    break;
+
+                  case 'filter-discussed':
+                      picturesCollection.sortBy('discussed');
+
+                    list.sort(function(a, b) {
+                      a = parseInt(a.comments, 10);
+                      b = parseInt(b.comments, 10);
+
+                      if (a > b) {
+                        return -1;
+                      }
+
+                      if (a < b) {
+                        return 1;
+                      }
+
+                      if (a === b) {
+                        return 0;
+                      }
+                    });
+                    break;
+                }
+
+                picturesCollection.reset(list);
+                localStorage.setItem('filterID', filterID);
               }
-            });
-            break;
 
-          default:
-            pictures.slice(0);
-                break;
-        }
-
-        localStorage.setItem('filterID', filterID);
-
-        return filteredPictures;
-      }
-
-      function initFilters() {
-        var filterForm = document.querySelector('.filters');
+              function initFilters() {
+                var filterForm = document.querySelector('.filters');
 
 
-        filterForm.addEventListener('click', function(evt) {
-          var clickedFilter = evt.target;
+                filterForm.addEventListener('click', function(evt) {
+                  var clickedFilter = evt.target;
 
-          setActiveFilter(clickedFilter.id);
-          clickedFilter.checked;
-        });
-      }
-
-
-      function setActiveFilter(filterID) {
-        currentPictures = filterPictures(pictures, filterID);
-        currentPage = 0;
-
-        renderPictures(currentPictures, currentPage, true);
-        checkNextPage();
-      }
-
-      function isNextPageAvailable() {
-        return currentPage < Math.ceil(pictures.length / PAGE_SIZE);
-      }
+                  setActiveFilter(clickedFilter.id);
+                });
+              }
 
 
-      function isAtTheBottom () {
-        var GAP = 100;
-        return pictureContainer.getBoundingClientRect().bottom - GAP <= window.innerHeight;
-      }
+              /**
+               * @param {String} filterID
+               */
+              function setActiveFilter(filterID) {
+                currentPictures = filterPictures(filterID);
+                currentPage = 0;
 
-      function checkNextPage () {
-        if(isAtTheBottom() && isNextPageAvailable()){
-          window.dispatchEvent(new CustomEvent('loadneeded'));
-        }
-      }
+                renderPictures(currentPage, true);
+                checkNextPage();
+              }
 
-      function initScroll() {
-        var someTimeout;
 
-        window.addEventListener('scroll', function() {
-          clearTimeout(someTimeout);
-          someTimeout = setTimeout(checkNextPage, 100);
-        });
+              /**
+               * @return {number}
+               */
+              function isNextPageAvailable() {
+                return currentPage < Math.ceil(initiallyLoaded.length / PAGE_SIZE);
+              }
 
-        window.addEventListener('loadneeded', function() {
-          renderPictures(currentPictures, currentPage++, false);
-        });
-      }
+              /**
+               * @return {number}
+               */
+              function isAtTheBottom () {
+                var GAP = 100;
+                return pictureContainer.getBoundingClientRect().bottom - GAP <= window.innerHeight;
+              }
 
-      function initGallery() {
-        window.addEventListener('galleryclick', function(evt) {
-          gallery.setPhotos(currentPictures);
+              function checkNextPage () {
+                if(isAtTheBottom() && isNextPageAvailable()){
+                  window.dispatchEvent(new CustomEvent('loadneeded'));
+                }
+              }
 
-          gallery.setCurrentPhoto(evt.detail.pictureElement._data.number);
-          gallery.show();
-        })
-      }
+              function initScroll() {
+                var someTimeout;
 
-      initFilters();
-      initScroll();
-      initGallery();
+                window.addEventListener('scroll', function() {
+                  clearTimeout(someTimeout);
+                  someTimeout = setTimeout(checkNextPage, 100);
+                });
 
-      loadPictures(function(loadedPictures) {
-        pictures = loadedPictures;
-        setActiveFilter(localStorage.getItem('filterID') || ('filter-popular'));
-      });
+                window.addEventListener('loadneeded', function() {
+                  renderPictures(currentPage++, false);
+                });
+              }
+
+              picturesCollection.fetch({timeout: REQUEST_FAILURE_TIMEOUT}).success(function(loaded, state, jqXHR) {
+                initiallyLoaded = jqXHR.responseJSON;
+                initFilters();
+                initScroll();
+                setActiveFilter(localStorage.getItem('filterID') || ('filter-popular'));
+                if (localStorage.getItem('filterID')) {
+                  var filterStorage = document.querySelector('#' + localStorage.getItem('filterID'));
+                  filterStorage.checked = true;
+                }
+              }).fail(function() {
+                showLoadFailture();
+              })
 		}
 	};
 

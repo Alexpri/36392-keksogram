@@ -64,7 +64,7 @@
 
   Photo.prototype.unrender = function() {
     this._element.parentNode.removeChild(this._element);
-    this._element.removeEventListener('click', this._onPhotoClick());
+    this._element.removeEventListener('click', this._onPhotoClick);
     this._element = null;
   };
 
