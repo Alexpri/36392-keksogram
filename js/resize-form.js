@@ -2,6 +2,9 @@
   var uploadForm = document.forms['upload-select-image'];
   var resizeForm = document.forms['upload-resize'];
   var filterForm = document.forms['upload-filter'];
+/*      resizeX = resizeForm["resize-x"],
+      resizeY = resizeForm["resize-y"],
+      resizeSize = resizeForm["resize-size"];*/
 
   var previewImage = resizeForm.querySelector('.resize-image-preview');
   var prevButton = resizeForm['resize-prev'];
@@ -17,23 +20,30 @@
 
   window.addEventListener('resizerchange', function(){
 
-    if (resizer.getConstraint().side > resizer._container.width || resizer.getConstraint().side < 0) {
-      resizer.setConstraint(0, 0, resizer._container.width);
+    console.log(resizer._image.width, resizer._image.height);
+
+    if (resizer.getConstraint().side > resizer._image.width || resizer.getConstraint().side < 0) {
+      resizer.setConstraint(0, 0, resizer._image.width);
+      console.log(1);
     }
 
-    if (resizer.getConstraint().x > resizer._container.width || resizer.getConstraint().x < 0) {
-      resizer.setConstraint(0, 0, resizer._container.width);
+    if (resizer.getConstraint().x > resizer._image.width || resizer.getConstraint().x < 0) {
+      resizer.setConstraint(resizer._image.height - resizer.getConstraint().x, resizer.getConstraint().y, resizer.getConstraint().side);
+      console.log(2);
     }
 
-    if (resizer.getConstraint().y > resizer._container.width || resizer.getConstraint().y < 0) {
-      resizer.setConstraint(0, 0, resizer._container.width);
+    if (resizer.getConstraint().y > resizer._image.height || resizer.getConstraint().y < 0) {
+      resizer.setConstraint(resizer.getConstraint().x, resizer._image.height - resizer.getConstraint().y, resizer.getConstraint().side);
+      console.log(3);
     }
+
   })
+
+
 
   resizeForm.onsubmit = function(evt) {
     evt.preventDefault();
 
-    console.log(resizer.exportImage().src);
     filterForm.elements['filter-image-src'] = resizer.exportImage().src;
 
     resizeForm.classList.add('invisible');

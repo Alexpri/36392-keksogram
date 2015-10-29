@@ -17,6 +17,8 @@
     // Создаем холст только после загрузки изображения.
     this._image.onload = function() {
 
+
+
       /**
        * @const
        * @type {number}
@@ -48,6 +50,8 @@
 
       // Отрисовка изначального состояния канваса.
       this.redraw();
+
+      window.dispatchEvent(new CustomEvent('imageload'));
     }.bind(this);
 
     // Фиксирование контекста обработчиков.
@@ -124,7 +128,7 @@
 
       var LINE_WIDTH = 6;
 
-      console.log(leftTopX, leftTopY, rightBottomX, rightBottomY);
+      //console.log(leftTopX, leftTopY, rightBottomX, rightBottomY);
 
 
       this._ctx.lineWidth = LINE_WIDTH;
