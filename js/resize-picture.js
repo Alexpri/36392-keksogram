@@ -106,20 +106,32 @@
       var leftTopX = - this._resizeConstraint.side / 2;
       var leftTopY = - this._resizeConstraint.side / 2;
 
-      var rightBottomX = this._resizeConstraint.side;
-      var rightBottomY = this._resizeConstraint.side;
+      var rightBottomX = parseInt(this._resizeConstraint.side, 10);
+      var rightBottomY = parseInt(this._resizeConstraint.side, 10);
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
       //
 
+      //leftTopX - rightBottomX < 569
+
+      //leftTopY - rightBottomY < 569
+
+      /**
+       * @const
+       * @type {number}
+       */
+
       var LINE_WIDTH = 6;
+
+      console.log(leftTopX, leftTopY, rightBottomX, rightBottomY);
 
 
       this._ctx.lineWidth = LINE_WIDTH;
       this._ctx.setLineDash([15, 10]);
       this._ctx.strokeStyle = '#FFE753';
       this._ctx.strokeRect(leftTopX, leftTopX, rightBottomX, rightBottomY);
+      //this._ctx.strokeRect(leftTopX, leftTopY, displX, displY);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
@@ -250,7 +262,6 @@
 
       requestAnimationFrame(function() {
         this.redraw();
-        console.log(1);
         window.dispatchEvent(new CustomEvent('resizerchange'));
       }.bind(this));
     },

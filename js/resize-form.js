@@ -16,8 +16,7 @@
   };
 
   window.addEventListener('resizerchange', function(){
-
-    //resizer.setConstraint();
+    resizer.setConstraint();
   })
 
   resizeForm.onsubmit = function(evt) {
