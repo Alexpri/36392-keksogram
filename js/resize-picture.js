@@ -22,11 +22,11 @@
        * @type {number}
        */
       var IMAGE_HEIGHT = 574;
-      var IMAGE_WIDTH = 507;
+      var IMAGE_WIDTH = 569;
       // Размер холста равен размеру загруженного изображения. Это нужно
       // для удобства работы с координатами.
-      this._container.width = IMAGE_HEIGHT;
-      this._container.height = IMAGE_WIDTH;
+      this._container.width = IMAGE_WIDTH;
+      this._container.height = IMAGE_HEIGHT;
       /**
        * Предлагаемый размер кадра в виде коэффициента относительно меньшей
        * стороны изображения.
@@ -248,22 +248,29 @@
      * @param {number} side
      */
     setConstraint: function(x, y, side) {
-      if (typeof x !== 'undefined') {
+      var update = false;
+
+      if (this._resizeConstraint.x != x) {
         this._resizeConstraint.x = x;
+        update = true;
       }
 
-      if (typeof y !== 'undefined') {
+      if (this._resizeConstraint.y != y) {
         this._resizeConstraint.y = y;
+        update = true;
       }
 
-      if (typeof side !== 'undefined') {
+      if (this._resizeConstraint.side != side) {
         this._resizeConstraint.side = side;
+        update = true;
       }
 
-      requestAnimationFrame(function() {
-        this.redraw();
-        window.dispatchEvent(new CustomEvent('resizerchange'));
-      }.bind(this));
+      if (update) {
+        requestAnimationFrame(function() {
+          this.redraw();
+          window.dispatchEvent(new CustomEvent('resizerchange'));
+        }.bind(this));
+      }
     },
 
     /**

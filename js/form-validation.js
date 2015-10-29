@@ -32,24 +32,64 @@
                 if (field == resizeX) {
 
                     field.onchange = function () {
+                       /* var x = parseInt(resizeY.value);
+                        var Size = parseInt(resizeSize.value);*/
 
-                        resizeY.value = parseInt(field.value, 10);
-                        resizeSize.value = parseInt(MAX_PHOTO_SIDE - field.value, 10);
-                        resizer.setConstraint(resizeX.value, resizeY.value, resizeSize.value);
+                        if (parseInt(field.value, 10) < 0 || parseInt(field.value, 10) > MAX_PHOTO_SIDE) {
+                            field.value = 0;
+                            resizeX.value = 0;
+                        }
+
+                        var y = parseInt(field.value, 10);
+                        var x = parseInt(resizeX.value, 10);
+                        var size = MAX_PHOTO_SIDE - parseInt(field.value, 10);
+
+                            resizeY.value = y;
+                            resizeSize.value = size;
+                            resizer.setConstraint(x, y, size);
+
+                        //resizeY.value = parseInt(field.value, 10);
+                        //resizeSize.value = MAX_PHOTO_SIDE - parseInt(field.value, 10);
                     }
                 } else if (field == resizeY) {
                     field.onchange = function () {
 
-                        resizeX.value = parseInt(field.value, 10);
-                        resizeSize.value = parseInt(MAX_PHOTO_SIDE - field.value, 10);
-                        resizer.setConstraint(resizeX.value, resizeY.value, resizeSize.value);
+                        if (parseInt(field.value, 10) < 0 || parseInt(field.value, 10) > MAX_PHOTO_SIDE) {
+                            field.value = 0;
+                            resizeY.value = 0;
+                        }
+
+                        var x = parseInt(field.value, 10);
+                        var y = parseInt(resizeY.value, 10);
+                        var size = MAX_PHOTO_SIDE - parseInt(field.value, 10);
+
+                            resizeX.value = x;
+                            resizeSize.value = size;
+                            resizer.setConstraint(x, y, size);
+
+                        //resizeX.value = parseInt(field.value, 10);
+                        //resizeSize.value = MAX_PHOTO_SIDE - parseInt(field.value, 10);
+                        //resizer.setConstraint(resizeX.value, resizeY.value, resizeSize.value);
                     }
                 }  else if (field == resizeSize) {
                     field.onchange = function () {
 
-                        resizeX.value = parseInt(MAX_PHOTO_SIDE - field.value, 10);
-                        resizeY.value = parseInt(MAX_PHOTO_SIDE - field.value, 10);
-                        resizer.setConstraint(resizeX.value, resizeY.value, resizeSize.value);
+                        if (parseInt(resizeSize.value, 10) < 0 || parseInt(resizeSize.value, 10) > MAX_PHOTO_SIDE) {
+                            resizeSize.value = MAX_PHOTO_SIDE;
+                        }
+
+                        var y = MAX_PHOTO_SIDE - parseInt(resizeSize.value, 10);
+                        var x = MAX_PHOTO_SIDE - parseInt(resizeSize.value, 10);
+                        var size = parseInt(field.value, 10);
+
+                            resizeY.value = y;
+                            resizeX.value = x;
+                            resizeSize.value = size;
+                            resizer.setConstraint(x, y, size);
+
+                        //resizeX.value = MAX_PHOTO_SIDE - parseInt(field.value, 10);
+                        //resizeY.value = MAX_PHOTO_SIDE - parseInt(field.value, 10);
+                        //resizer.setConstraint(resizeX.value, resizeY.value, resizeSize.value);
                     }
                 }
             };
