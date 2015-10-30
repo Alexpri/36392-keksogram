@@ -37,16 +37,20 @@
        */
       var INITIAL_SIDE_RATIO = 0.75;
       // Размер меньшей стороны изображения.
-      var side = Math.min(
+      var side = Math.ceil(
           this._container.width * INITIAL_SIDE_RATIO,
           this._container.height * INITIAL_SIDE_RATIO);
+
+      var ImageSide = Math.min(
+        this._container.width,
+        this._container.height);
 
       // Изначально предлагаемое кадрирование — часть по центру с размером в 3/4
       // от размера меньшей стороны.
       this._resizeConstraint = new Square(
-          this._container.width / 2 - side / 2,
-          this._container.height / 2 - side / 2,
-          side);
+        parseInt((ImageSide / 2 - side / 2), 10),
+        parseInt((ImageSide / 2 - side / 2), 10),
+          parseInt(side, 10));
 
       // Отрисовка изначального состояния канваса.
       this.redraw();
@@ -107,8 +111,8 @@
       this._ctx.drawImage(this._image, displX, displY);
 
 
-      var leftTopX = - this._resizeConstraint.side / 2;
-      var leftTopY = - this._resizeConstraint.side / 2;
+      var leftTopX =  parseInt((- this._resizeConstraint.side / 2), 10);
+      var leftTopY = parseInt((- this._resizeConstraint.side / 2), 10);
 
       var rightBottomX = parseInt(this._resizeConstraint.side, 10);
       var rightBottomY = parseInt(this._resizeConstraint.side, 10);
@@ -117,9 +121,6 @@
       // кадрирования. Координаты задаются от центра.
       //
 
-      //leftTopX - rightBottomX < 569
-
-      //leftTopY - rightBottomY < 569
 
       /**
        * @const
@@ -134,8 +135,7 @@
       this._ctx.lineWidth = LINE_WIDTH;
       this._ctx.setLineDash([15, 10]);
       this._ctx.strokeStyle = '#FFE753';
-      this._ctx.strokeRect(leftTopX, leftTopX, rightBottomX, rightBottomY);
-      //this._ctx.strokeRect(leftTopX, leftTopY, displX, displY);
+      this._ctx.strokeRect(leftTopX, leftTopY, rightBottomX, rightBottomY);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
@@ -305,6 +305,11 @@
           this._resizeConstraint.y,
           this._resizeConstraint.side,
           this._resizeConstraint.side);
+
+      console.log(this._resizeConstraint.x,
+        this._resizeConstraint.y,
+        this._resizeConstraint.side,
+        this._resizeConstraint.side)
 
       // Создается новый canvas, по размерам совпадающий с кадрированным
       // изображением, в него добавляется ImageData взятый из изначального
