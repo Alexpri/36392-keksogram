@@ -1,7 +1,7 @@
 'use strict';
 
 define([
-  'js/models/photo'
+  'js/models/photo.js'
 ], function(PictureModel) {
 
   /**

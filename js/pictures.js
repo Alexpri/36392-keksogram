@@ -195,11 +195,14 @@ define([
 
 
               function parseURL () {
-                var filterArray = location.hash.match(/^#filter\/(\S+)$/);
-                var filterActiveId = filterArray[1];
+                if (location.hash.match(/^#filter\/(\S+)$/)) {
 
-                var filterHash = document.querySelector('#' + filterActiveId);
-                filterHash.checked = true;
+                  var filterArray = location.hash.match(/^#filter\/(\S+)$/);
+                  var filterActiveId = filterArray[1];
+                  var filterHash = document.querySelector('#' + filterActiveId);
+                  filterHash.checked = true;
+                }
+
 
                 currentPictures = filterPictures(filterActiveId);
                 currentPage = 0;
