@@ -1,7 +1,6 @@
-/*use strict*/
+'use strict';
 
-(function() {
-
+define(function() {
   /**
    * @const
    * @type {number}
@@ -170,5 +169,5 @@
     }
   });
 
-  window.PictureView = PictureView;
-})();
+  return PictureView;
+});

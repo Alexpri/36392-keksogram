@@ -1,6 +1,6 @@
 'use strict';
 
-(function() {
+define(function() {
   /**
    * @constructor
    * @param {FileBuffer}
@@ -128,8 +128,6 @@
        */
 
       var LINE_WIDTH = 6;
-
-      //console.log(leftTopX, leftTopY, rightBottomX, rightBottomY);
 
 
       this._ctx.lineWidth = LINE_WIDTH;
@@ -306,11 +304,6 @@
           this._resizeConstraint.side,
           this._resizeConstraint.side);
 
-      console.log(this._resizeConstraint.x,
-        this._resizeConstraint.y,
-        this._resizeConstraint.side,
-        this._resizeConstraint.side)
-
       // Создается новый canvas, по размерам совпадающий с кадрированным
       // изображением, в него добавляется ImageData взятый из изначального
       // изображения и сохраняется в dataURL, с помощью метода toDataURL.
@@ -354,5 +347,5 @@
   };
 
 
-  window.Resizer = Resizer;
-})();
+  return Resizer;
+});

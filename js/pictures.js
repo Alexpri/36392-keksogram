@@ -1,4 +1,22 @@
-(function() {
+'use strict';
+
+requirejs.config({
+  baseUrl: 'js'
+});
+
+define([
+  'gallery',
+  'models/photos',
+  'views/photo',
+  // NB! Модули, которые ничего не возвращают, а только исполняют код,
+  // тоже можно подключать, но главное делать это в конце списка, чтобы
+  // не объявлять им имя в параметрах.
+  'resize-form',
+  'upload-form',
+  'form-validation',
+  'filter-form',
+  'logo-background'
+], function(Gallery, PicturesCollection, PictureView) {
 
 	var Template = {
 		init: function(){
@@ -58,13 +76,14 @@
                * @param {boolean=} replace
                */
               function renderPictures(pageNumber, replace) {
-                var fragment = document.createDocumentFragment();
-                var picturesFrom = pageNumber * PAGE_SIZE;
-                var picturesTo = picturesFrom + PAGE_SIZE;
-
-
                 replace = typeof replace !== 'undefined' ? replace : true;
                 pageNumber = pageNumber || 0;
+
+                var fragment = document.createDocumentFragment();
+                var picturesFrom = pageNumber * PAGE_SIZE;
+
+
+                var picturesTo = picturesFrom + PAGE_SIZE;
 
                 if (replace) {
                   while (renderedViews.length) {
@@ -73,7 +92,6 @@
                     pictureContainer.removeChild(viewToRemove.el);
                     viewToRemove.off('galleryclick');
                     viewToRemove.remove();
-
                   }
                 }
 
@@ -153,26 +171,37 @@
                 }
 
                 picturesCollection.reset(list);
-                localStorage.setItem('filterID', filterID);
               }
 
               function initFilters() {
                 var filterForm = document.querySelector('.filters');
 
 
+                /**
+                 * SetHash
+                 */
                 filterForm.addEventListener('click', function(evt) {
-                  var clickedFilter = evt.target;
+                  if (evt.target.classList.contains('filters-radio')) {
+                    var clickedFilter = evt.target.id;
 
-                  setActiveFilter(clickedFilter.id);
+                    location.hash = 'filter/' + clickedFilter;
+                  }
                 });
               }
 
+              window.addEventListener('hashchange', function (){
+                parseURL();
+              });
 
-              /**
-               * @param {String} filterID
-               */
-              function setActiveFilter(filterID) {
-                currentPictures = filterPictures(filterID);
+
+              function parseURL () {
+                var filterArray = location.hash.match(/^#filter\/(\S+)$/);
+                var filterActiveId = filterArray[1];
+
+                var filterHash = document.querySelector('#' + filterActiveId);
+                filterHash.checked = true;
+
+                currentPictures = filterPictures(filterActiveId);
                 currentPage = 0;
 
                 renderPictures(currentPage, true);
@@ -218,11 +247,7 @@
                 initiallyLoaded = jqXHR.responseJSON;
                 initFilters();
                 initScroll();
-                setActiveFilter(localStorage.getItem('filterID') || ('filter-popular'));
-                if (localStorage.getItem('filterID')) {
-                  var filterStorage = document.querySelector('#' + localStorage.getItem('filterID'));
-                  filterStorage.checked = true;
-                }
+                parseURL();
               }).fail(function() {
                 showLoadFailture();
               })
@@ -232,4 +257,4 @@
 	(function() {
 		Template.init();
 	})();
-})();
+});

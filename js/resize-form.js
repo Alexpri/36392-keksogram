@@ -1,12 +1,13 @@
-(function() {
-  var uploadForm = document.forms['upload-select-image'];
-  var resizeForm = document.forms['upload-resize'];
-  var filterForm = document.forms['upload-filter'];
+'use strict';
+
+define(function() {
+  var uploadForm = document.forms['upload-select-image'],
+      resizeForm = document.forms['upload-resize'],
+      filterForm = document.forms['upload-filter'],
       resizeX = resizeForm["resize-x"],
       resizeY = resizeForm["resize-y"],
       resizeSize = resizeForm["resize-size"];
 
-  var previewImage = resizeForm.querySelector('.resize-image-preview');
   var prevButton = resizeForm['resize-prev'];
 
   prevButton.onclick = function(evt) {
@@ -24,8 +25,6 @@
     var x = resizer.getConstraint().x,
         y = resizer.getConstraint().y,
       side = resizer.getConstraint().side;
-
-    console.log(x, y, side);
 
 
     resizeX.value = x;
@@ -74,10 +73,7 @@
       side = photoHeight;
       resizer.setConstraint(x, y, side);
     }
-
-    console.log(x, y, side);
   });
-
 
 
   resizeForm.onsubmit = function(evt) {
@@ -89,4 +85,4 @@
     resizeForm.classList.add('invisible');
     filterForm.classList.remove('invisible');
   };
-})();
+});

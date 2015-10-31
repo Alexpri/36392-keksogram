@@ -1,6 +1,6 @@
-/*use strict*/
+'use strict';
 
-(function() {
+define(function() {
   /**
    * @constructon
    * @extend {Backbone.Model}
@@ -22,5 +22,5 @@
     }
   });
 
-  window.PictureModel = PictureModel;
-})();
+  return PictureModel;
+});

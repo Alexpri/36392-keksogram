@@ -1,16 +1,18 @@
+'use strict';
 
-/*use strict*/
+define([
+  'js/models/photo'
+], function(PictureModel) {
 
-(function() {
   /**
    * @constructon
    * @param{Object} attributes
    * @param{Object} options
    */
-    var PicturesCollection = Backbone.Collection.extend({
-      model: PictureModel,
-      url: 'data/pictures.json'
-    });
+  var PicturesCollection = Backbone.Collection.extend({
+    model: PictureModel,
+    url: 'data/pictures.json'
+  });
 
-    window.PicturesCollection = PicturesCollection;
-})();
+  return PicturesCollection;
+});

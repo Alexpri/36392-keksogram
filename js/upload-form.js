@@ -1,4 +1,8 @@
-(function() {
+'use strict';
+
+define([
+    'resize-picture'
+],function(Resizer) {
   var uploadForm = document.forms['upload-select-image'];
   var resizeForm = document.forms['upload-resize'];
   var filterForm = document.forms['upload-filter'];
@@ -32,7 +36,6 @@
       resizer = new Resizer(image);
 
       resizer.setElement(resizeForm);
-      //resizeForm.querySelector('.resize-image-preview').src = image;
       filterForm.querySelector('.filter-image-preview').src = image;
 
       uploadForm.classList.add('invisible');
@@ -43,4 +46,4 @@
   uploadForm.onreset = function() {
     fileElement.classList.remove('upload-input-hasvalue');
   };
-})();
+});
