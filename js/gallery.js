@@ -67,6 +67,7 @@ define([
         this._pictureElement.innerHTML = '';
 
         var imageElement = new GalleryPicture({model: this._photos.at(this._currentPhoto)});
+        console.log(imageElement);
         imageElement.render();
 
         this._pictureElement.appendChild(imageElement.el);
@@ -110,6 +111,7 @@ define([
             return new Backbone.Model({
                 url: photoSrc
             });
+          // + push в начало массива видео
         }));
     };
 

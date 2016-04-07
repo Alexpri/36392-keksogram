@@ -1,4 +1,6 @@
-(function() {
+'use strict';
+
+define(function() {
 
   var REQUEST_FAILURE_TIMEOUT = 10000;
   var IMAGE_WIDTH = 182;
@@ -21,6 +23,7 @@
 
   /**
   * @param {Element|DocumentFragment} container
+   * @param {Number} number
   */
 
   Photo.prototype.render = function(container, number) {
@@ -82,5 +85,5 @@
   };
 
 
-  window.Photo = Photo;
-})();
+  return Photo;
+});

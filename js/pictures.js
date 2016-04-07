@@ -103,6 +103,9 @@ define([
                      renderedViews.push(view);
 
                     view.on('galleryclick', function() {
+
+                      //gallery.setPhotos(view.model.get('url'));
+
                       gallery.setPhotos(view.model.get('pictures'));
                       gallery.setCurrentPhoto(0);
                       gallery.show();

@@ -9,15 +9,17 @@ define(function() {
     /**
      * @override
      */
-    inititalize: function() {
+    initialize: function() {
       this.set('liked', false);
     },
 
     like: function() {
+      console.log('liked');
       this.set('liked',true);
     },
 
     dislike: function() {
+      console.log('dislike');
       this.set('liked', false);
     }
   });

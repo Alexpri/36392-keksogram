@@ -150,5 +150,6 @@
   "comments": 11,
   "url": "photos/26.mp4",
   "preview": "photos/26.jpg",
-  "date": "2015-10-02"
+  "date": "2015-10-02",
+  "pictures": ["https://cdn.ostrovok.ru/t/x500/second/01/3a/013a5d9cdb1b73da23cd7617bac2add7beb7b367.jpeg","https://cdn.ostrovok.ru/t/x500/second2/1389670190/105c0ef0cfeb483c153361d80a35480e.jpg","https://cdn.ostrovok.ru/t/x500/second2/1389664349/fecbbe65532fd8ca61761854104413d1.jpg","https://cdn.ostrovok.ru/t/x500/second2/1389664350/aea4dc66a7960cc26bfb51489320e1b2.jpg"]
 }]
