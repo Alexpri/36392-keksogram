@@ -1,4 +1,4 @@
-*var Gallery = {
+var Gallery = {
     key: {
         ESC: 27,
         LEFT: 37,
