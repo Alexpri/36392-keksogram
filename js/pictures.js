@@ -31,6 +31,10 @@ define([
       self.REQUEST_FAILURE_TIMEOUT = 10000;
       self.PAGE_SIZE = 12;
       self.GAP = 100;
+      /**
+       * @type {Array.<object>}
+       */
+      self.renderedViews = [];
     },
 
     filterHidden: function () {
@@ -86,11 +90,6 @@ define([
     renderPictures: function (pageNumber, replace) {
       var self = this;
 
-      /**
-       * @type {Array.<object>}
-       */
-      var renderedViews = [];
-
       replace = typeof replace !== 'undefined' ? replace : true;
       pageNumber = pageNumber || 0;
 
@@ -100,28 +99,30 @@ define([
 
       var picturesTo = picturesFrom + self.PAGE_SIZE;
 
-      if (replace) {
-        while (renderedViews.length) {
-          var viewToRemove = renderedViews.shift();
 
+      if (replace) {
+        while (self.renderedViews.length) {
+          var viewToRemove = self.renderedViews.shift();
           self.pictureContainer.removeChild(viewToRemove.el);
           viewToRemove.off('galleryclick');
           viewToRemove.remove();
         }
       }
-
       self.picturesCollection.slice(picturesFrom, picturesTo).forEach(function (model) {
         var view = new PictureView({model: model});
 
         view.render();
         fragment.appendChild(view.el);
-        renderedViews.push(view);
+        self.renderedViews.push(view);
 
-        view.on('galleryclick', function () {
-          self.gallery.setPhotos(view.model.get('pictures'));
-          self.gallery.setCurrentPhoto(0);
-          self.gallery.show();
-        });
+        if (view.model.has('pictures')) {
+          view.on('galleryclick', function () {
+            self.gallery.setPhotos(view.model.get('pictures'));
+            self.gallery.setCurrentPhoto(0);
+            self.gallery.show();
+          });
+        }
+
       });
 
       self.pictureContainer.appendChild(fragment);
