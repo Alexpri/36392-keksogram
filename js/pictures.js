@@ -113,16 +113,21 @@ define([
 
         view.render();
         fragment.appendChild(view.el);
-        self.renderedViews.push(view);
-
-        if (view.model.has('pictures')) {
           view.on('galleryclick', function () {
-            self.gallery.setPhotos(view.model.get('pictures'));
-            self.gallery.setCurrentPhoto(0);
-            self.gallery.show();
+            if (view.model.has('pictures')) {
+              self.gallery.setPhotos(view.model.get('pictures'));
+              self.gallery.setCurrentFrames(0);
+              self.gallery.show();
+            }
+            if (view.model.has('preview')) {
+              self.gallery.setVideos(view.model.get('url'));
+              self.gallery.setCurrentFrames(0);
+              self.gallery.show();
+            }
           });
-        }
 
+
+        self.renderedViews.push(view);
       });
 
       self.pictureContainer.appendChild(fragment);

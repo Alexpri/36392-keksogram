@@ -60,7 +60,6 @@ define(function() {
       var self = this;
 
       this.el.appendChild(pictureTemp.content.cloneNode(true));
-
       this.el.querySelector('.picture-comments').textContent = this.model.get('comments');
       this.el.querySelector('.picture-likes').textContent =  this.model.get('likes');
 
@@ -72,7 +71,6 @@ define(function() {
         if (this.model.get('preview')) {
           pictureImage.src = this.model.get('preview');
           videoBlock.src = this.model.get('url');
-          console.log(videoBlock);
         } else if (this.model.get('url')) {
           pictureImage.src =  this.model.get('url');
         }
@@ -100,7 +98,15 @@ define(function() {
 
       }
 
+      self.hasGallery();
+
       self._updateLike();
+    },
+
+    hasGallery: function(){
+      if (this.model.has('pictures') || this.model.has('preview')) {
+        this.el.classList.add('has-gallery');
+      }
     },
 
     /**

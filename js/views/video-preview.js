@@ -11,10 +11,19 @@ define(function() {
         /**
          * @override
          */
-        tagName: 'img',
+        tagName: 'video',
+
+        /**
+         * @override
+         */
+
+        attributes : {
+          autoplay: 'autoplay'
+        },
 
         render: function() {
-            this.el.src = this.model.get('preview');
+            //this.el.src = this.model.get('preview');
+          this.el.src = this.model.get('url');
         }
     });
 

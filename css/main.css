@@ -322,8 +322,18 @@ input[type=radio]:checked + .upload-filter-label {
   padding: 0 10px;
 }
 
-.picture:hover .picture-stats {
+.picture .picture-stats {
   display: inline-block;
+  visibility: hidden;
+  opacity: 0;
+
+  -webkit-transition: opacity.3s;
+  transition: opacity.3s;
+}
+
+.picture:hover .picture-stats {
+  visibility: visible;
+  opacity: 1;
 }
 
 .picture-load-failure .picture-stats {
@@ -368,6 +378,17 @@ input[type=radio]:checked + .upload-filter-label {
   height: 15px;
   width: 19px;
 }
+
+.has-gallery {
+  cursor: pointer;
+  -webkit-transition: opacity .3s;
+  transition: opacity .3s;
+}
+
+.has-gallery:hover {
+  opacity: .7;
+}
+
 
 .picture-likes.picture-favourite-liked:before {
   background-position: -19px 0;
