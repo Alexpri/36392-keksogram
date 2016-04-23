@@ -114,14 +114,14 @@ define(function() {
      * @private
      */
     _onClick: function(evt) {
-      var clickedElement = evt.currentTarget;
+      var clickedElement = evt.target;
 
-      if (clickedElement.classList.contains('picture') &&
+      if (clickedElement.parentNode.classList.contains('picture') &&
           !clickedElement.classList.contains('picture-load-failure')) {
           this.trigger('galleryclick');
       }
 
-      if (evt.target.classList.contains('picture-likes')) {
+      if (clickedElement.classList.contains('picture-likes')) {
         if (this.model.get('liked')) {
           this.model.dislike();
         } else {
